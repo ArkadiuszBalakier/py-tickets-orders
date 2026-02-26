@@ -81,13 +81,13 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset.all()
         date_str = self.request.query_params.get("date")
-        movie_id = self.request.query_params.get("movie_id")
+        movie_id_str = self.request.query_params.get("movie")
 
         if date_str:
             queryset = queryset.filter(show_time__date=date_str)
 
-        if movie_id:
-            queryset = queryset.filter(movie_id=int(movie_id))
+        if movie_id_str:
+            queryset = queryset.filter(movie_id=int(movie_id_str))
 
         if self.action == "list":
             return queryset.annotate(
@@ -112,7 +112,6 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
-    pagination_class = None
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
